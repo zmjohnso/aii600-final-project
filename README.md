@@ -8,6 +8,8 @@ Follow the [final project lab](https://vsokolov.org/labs/final-project-lab.html)
 
 Alone, or a group of at most three. One person forks. That person adds the other members and `VadimSokolov` as collaborators. On a repository owned by a personal account the role is Write. On the fork, write the names and GitHub usernames under this heading. One person speaks at the presentation. Every member can explain the whole repository.
 
+- Zachary Johnson (`zmjohnso`)
+
 ## Fork
 
 The repository is public, and so is the fork.
@@ -55,6 +57,8 @@ Leave the data files out of git. A file you are allowed to republish goes on the
 ## Tools
 
 R or Python. Use the language you can explain. AI assistants are allowed. On your fork, add one line to this README: what you used, and for what. You are responsible for everything on `main`, including the parts you did not write.
+
+I used Claude Code for setup (installing Quarto, configuring the GitHub CLI, pinning the Python version).
 
 ## Files
 
