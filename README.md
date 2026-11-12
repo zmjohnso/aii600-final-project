@@ -58,7 +58,7 @@ Leave the data files out of git. A file you are allowed to republish goes on the
 
 R or Python. Use the language you can explain. AI assistants are allowed. On your fork, add one line to this README: what you used, and for what. You are responsible for everything on `main`, including the parts you did not write.
 
-I used Claude Code for setup (installing Quarto, configuring the GitHub CLI, pinning the Python version).
+I used Claude Code for setup (installing Quarto, configuring the GitHub CLI, pinning the Python version), to write the data download scripts and the draft code and text of both notebooks, and to draft the `decisions.md` entries. I chose the questions and the decisions, and I read and am responsible for everything on `main`.
 
 ## Files
 
