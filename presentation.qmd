@@ -1,26 +1,126 @@
 ---
-title: "Project title"
+title: "Weekly covered calls on bitcoin"
+subtitle: "Which strike, and how much of the stack?"
+author: "Zachary Johnson"
+date: "2026-12-02"
+date-format: long
 format:
   revealjs:
     embed-resources: true
     self-contained-math: true
     slide-number: true
+    center: false
     width: 1280
     height: 720
+    title-slide-attributes:
+      data-background-image: fig/deck_title.png
+      data-background-size: 100% auto
+      data-background-position: bottom
+      data-background-color: "#fcfcfb"
+    include-in-header:
+      text: |
+        <style>
+        .reveal-viewport, .reveal { background-color: #fcfcfb; color: #0b0b0b; }
+        .reveal-viewport::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 12px; background: #2a78d6; z-index: 50; }
+        .reveal h2 { font-size: 0.62em; text-transform: uppercase; letter-spacing: 0.16em; font-weight: 700; color: #2a78d6; margin: 0.9em 0 0.25em; }
+        .reveal .headline { font-size: 1.5em; font-weight: 800; line-height: 1.1; margin: 0 0 0.3em; }
+        .reveal .sub { font-size: 0.78em; color: #52514e; line-height: 1.25; }
+        .reveal .stat { font-size: 3.4em; font-weight: 800; line-height: 1; color: #2a78d6; margin-top: 0.35em; }
+        .reveal .statcap { font-size: 0.7em; color: #52514e; margin: 0.2em 0 0.9em; }
+        .reveal .chip { display: inline-block; font-size: 0.52em; color: #52514e; border: 1px solid #c3c2b7; border-radius: 1em; padding: 0.2em 0.9em; margin-top: 0.4em; }
+        .reveal img { display: block; margin: 0; max-width: 100%; max-height: none; height: auto; border: 0; box-shadow: none; }
+        .reveal .columns { align-items: center; }
+        .reveal .slides > section#title-slide { top: 0 !important; text-align: left; padding: 0 0 0 0.4em; }
+        .reveal #title-slide h1.title { font-size: 1.9em; font-weight: 800; margin: 0.9em 0 0.1em; }
+        .reveal #title-slide p.subtitle { font-size: 0.95em; color: #52514e; margin: 0 0 0.6em; }
+        .reveal #title-slide p.author, .reveal #title-slide p.date { font-size: 0.6em; color: #52514e; margin: 0.1em 0; }
+        .reveal #title-slide .quarto-title-authors { display: flex; justify-content: flex-start; margin: 0.2em 0 0; }
+        .reveal #title-slide .quarto-title-author { padding: 0; text-align: left; }
+        .reveal #title-slide .quarto-title-author-name { font-size: 0.62em; color: #52514e; text-align: left; }
+        </style>
 ---
 
 ## Action
 
-What should be done. Replace this sentence.
+::: {.headline}
+Sell weekly calls on nearly all your coin
+:::
+
+:::: {.columns}
+::: {.column width="68%"}
+![](fig/deck_action.png)
+:::
+::: {.column width="32%"}
+::: {.stat}
+93%
+:::
+::: {.statcap}
+of the stack written, on average
+:::
+::: {.sub}
+Strike set by DVOL: close to the money above about 40%.
+:::
+:::
+::::
+
+::: {.notes}
+I hold bitcoin and can sell a call against it every Friday. Two choices matter: the strike, and how much of the stack to write. The gray line on the title slide is bitcoin since 2021, and the blue part is the year the model never saw. Bitcoin fell through it.
+
+Each dot is one test Friday. When DVOL, the market's expected volatility, is above about 40 percent, the rule sells close to the money. Below that the premium is thin, and it sells 23 to 29 percent above spot, where there is almost nothing at stake. On average it writes 93 percent of the stack, and the size barely matters, because the strike does the work. Strike and size both come from the model's predictive distribution, so the rule is explicit, not a guess.
+:::
 
 ## Reason
 
-Why, in the decision maker's units. The held-out score in `analysis.ipynb` has to agree with this slide.
+::: {.headline}
++31% more bitcoin than holding
+:::
+
+::: {.sub}
+Selling weekly calls, over 52 test weeks.
+:::
+
+![](fig/deck_reason.png){.nostretch width=88%}
+
+::: {.chip}
+Black-Scholes prices, not fills. A falling year.
+:::
+
+::: {.notes}
+This is selling weekly calls against just holding the coins, measured in bitcoin. Over the 52 weeks the model never saw, the rule ended 31 percent ahead. That is about 526 thousand satoshis per coin per week, standard error 183 thousand, and it was ahead of holding in 85 percent of weeks. Plain DVOL selling did nearly as well, 29 percent. Two caveats. The prices are Black-Scholes at DVOL, not real fills. And bitcoin fell, so most calls expired worthless. The strike matters: a fixed call 10 percent out of the money earned nothing.
+:::
 
 ## Risk
 
-The main risk of the action: a probability or a cost, not the held-out score.
+::: {.headline}
+Behind holding in 8 of 52 weeks
+:::
+
+![](fig/deck_risk.png){.nostretch width=88%}
+
+::: {.chip}
+The test year fell, so a rally is untested.
+:::
+
+::: {.notes}
+Each bar is one test week. Red is a week the call left me behind holding: 8 of 52, 15 percent. The worst was minus 4.0 percent of the stack, and the average losing week minus 1.3. The orange and purple lines are the worst weeks of the alternatives. The DVOL-only rule lost 12.5 percent in one week, and a full at-the-money call lost 17 percent. That call actually grew slightly more, but its swings are four times as large. What I have not tested is a strong rally, where selling the call caps my gain.
+:::
 
 ## Value
 
-What it is worth to be less wrong, in the units of the loss.
+::: {.headline}
+Safety, not growth
+:::
+
+::: {.sub}
+A tie on growth. The worst week is a third as deep.
+:::
+
+![](fig/deck_value.png){.nostretch width=88%}
+
+::: {.chip}
+"Knows" means perfect foresight, not a real forecast.
+:::
+
+::: {.notes}
+Two questions. The last slide compared selling with holding, and selling won. This one asks whether my model adds anything to simply selling at DVOL's level. On growth it does not: about 43 thousand satoshis more per coin per week, standard error 294 thousand, a tie. A satoshi is one hundred millionth of a bitcoin. My hypothesis, that realized volatility helps, was not supported. What the model buys is safety: the worst week is minus 4 percent, not minus 12.5. The green bars are not forecasts. Knowing next week's volatility exactly would add about 11 thousand satoshis, which is nothing, while knowing the direction would add about 1.3 million. So the value is in direction, and a volatility model cannot give it.
+:::
