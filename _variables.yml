@@ -1,0 +1,23 @@
+{
+  "spot": {
+    "weeks": 52,
+    "trades": 5,
+    "losses": 0,
+    "model": "+12.0%",
+    "baseline": "+12.0%",
+    "low_premium": "+2.0%",
+    "high_premium": "+17.4%",
+    "worst": "+0.0%",
+    "rally": "-13.6%",
+    "break_even_sats": "65,417",
+    "history": "+0",
+    "history_low": "+0",
+    "history_high": "+0",
+    "fee_sats": "+193,095",
+    "fee_low": "-4,894",
+    "fee_high": "+441,937",
+    "gap_log": "+0.000003",
+    "gap_low": "+0.000000",
+    "gap_high": "+0.000010"
+  }
+}

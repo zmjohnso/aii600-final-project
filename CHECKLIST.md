@@ -23,7 +23,7 @@ Tick every line that the pushed `main` covers. A line you cannot tick needs one 
 ## 4. Uncertainty
 
 - [x] Every prediction carries a standard error, an interval, or a predictive distribution.
-- [x] The error is measured out of sample, and you say how it grows as the forecast moves further from the data.
+- [x] The error is measured out of sample, and you say how it grows as the forecast moves further from the data. See the one-week forecast’s training-input support and coverage table.
 - [x] Residuals plotted against time or against the prediction, and a statement of whether the error looks like noise or like bias.
 
 ## 5. Decision
@@ -53,7 +53,7 @@ Tick every line that the pushed `main` covers. A line you cannot tick needs one 
 - [x] Names and GitHub usernames are in `README.md`.
 - [ ] A group reached `main` through pull requests, and each request names a `decisions.md` entry. Not applicable: this is a solo project, and the README lets a person working alone commit to `main` (pull request 1 merged the proposal draft).
 - [x] `requirements.txt` pins the packages, and `.python-version` is the interpreter that ran the notebook. An R project uses `renv.lock` instead, which records the R version.
-- [x] The `data` release holds the data files, or `data/README.md` gives the command that downloads them from the source. Each file has a SHA-256 there, and the notebook checks it. The notebook on `main` was run from the top and committed with its outputs. Secrets and fitted weights are not in git.
+- [x] The `data` release holds the data files, or `data/README.md` gives the command that downloads them from the source. Each file has a SHA-256 there, and the notebook checks it. The reviewed notebook was run from the top and includes its outputs. Secrets and fitted weights are not in git.
 - [x] The split entry in `decisions.md` records the cutoff date, or the seed and the fraction.
 
 ## Disclosure

@@ -4,6 +4,13 @@ Fork this repository once per project. The fork tracks the code and the document
 
 Follow the [final project lab](https://vsokolov.org/labs/final-project-lab.html) from the question through the decision to the short presentation. The strawberry harvest on that page is the worked example. Your project is your own hypothesis, your own data, and a decision someone will make differently because of the model. `CHECKLIST.md` is the lab's "In your project" boxes. The ticks on the lab page are saved in that browser only. `CHECKLIST.md` is the list that counts.
 
+
+## Study
+
+This version uses daily Coin Metrics Community BTC/USD reference prices. It tests whether seven-day realized spot volatility improves a fitted 30-day baseline for a hypothetical weekly BTC-settled covered call. Every policy receives the same simulated option premiums. The notebook also tests a lagged blockchain fee feature separately. See [data provenance and attribution](data/README.md).
+
+From the repository root, run `python scripts/fetch_covered_call.py`, then execute `analysis.ipynb` with the pinned environment. The rendered deck is `presentation.html`.
+
 ## Who
 
 Alone, or a group of at most three. One person forks. That person adds the other members and `VadimSokolov` as collaborators. On a repository owned by a personal account the role is Write. On the fork, write the names and GitHub usernames under this heading. One person speaks at the presentation. Every member can explain the whole repository.
@@ -36,13 +43,13 @@ The times are 7:00 pm Eastern. The submission is what has been pushed to `main` 
 
 - Proposal, 28 October. `PROPOSAL.md`, at most one page, with the three headings already in that file. The first entry in `decisions.md` records that choice and the alternative you set aside.
 - Preliminary results, 18 November. `analysis.ipynb` has the raw-data plot, the summary table, the split, one baseline, one model, and both held-out scores in the units of the decision. `decisions.md` has an entry for the split, the model, and the loss.
-- Final presentation, 9 December. `presentation.html` is the presentation. `decisions.md` runs from the proposal to the action on the first content slide. The repository meets `CHECKLIST.md`. The talk is that night, 7:30 to 10:15 pm. Three minutes, the same length for one person and for a group.
+- Final presentation, Wednesday, 2 December. The instructor’s latest note gives each project 6.5 minutes total, including one directed question per member. The deck is `presentation.html`. Prepare it before class and keep personal laptops and screens away during presentations.
 
 A late push still gets a comment, and the issue says it was late. The checkpoints have no separate points. If `main` is not on GitHub when you are scheduled to present, that slot waits until it is, and no later than 16 December.
 
 ## The talk
 
-The talk is `presentation.html`, opened in a browser. It is a title slide plus four slides: the action, the reason, the risk of that action with a number, and what it is worth to be less wrong. Do not add slides. The risk is a probability or a cost the decision maker can use. The held-out score, in the units of the decision, stays in `analysis.ipynb` and has to agree with the reason slide. Edit `presentation.qmd`, then render it:
+The talk is `presentation.html`, opened in a browser. It is a title slide plus four slides: the action, the reason, the risk of that action with a number, and what it is worth to be less wrong. Do not add slides. The risk is a probability or a cost the decision maker can use. The held-out score, in the units of the decision, stays in `analysis.ipynb` and has to agree with the reason slide. Run `analysis.ipynb` from the top with the pinned Python environment to refresh the figures and `_variables.yml`. Edit `presentation.qmd` and render the slides.
 
 ```bash
 quarto render presentation.qmd
@@ -58,12 +65,12 @@ Leave the data files out of git. A file you are allowed to republish goes on the
 
 R or Python. Use the language you can explain. AI assistants are allowed. On your fork, add one line to this README: what you used, and for what. You are responsible for everything on `main`, including the parts you did not write.
 
-I used Claude Code for setup (installing Quarto, configuring the GitHub CLI, pinning the Python version), to write the data download script and the draft code and text of the notebook, to draft `presentation.qmd`, and to draft the `decisions.md` entries. I chose the questions and the decisions, and I read and am responsible for everything on `main`.
+I used Claude Code for setup (installing Quarto, configuring the GitHub CLI, pinning the Python version), to write the data download script and the draft code and text of the notebook, to draft `presentation.qmd`, and to draft the `decisions.md` entries. I also used ChatGPT Codex to audit the project, implement the matched comparisons and sensitivity checks, and revise the deck and defense preparation. I am responsible for the analysis and decisions on `main`.
 
 ## Files
 
 - `PROPOSAL.md`. The proposal. Replace the prompts. Leave the headings.
-- `presentation.qmd` and `presentation.html`. The talk. A title slide and four slides. Replace the prompts. Leave the headings.
+- `presentation.qmd` and `presentation.html`. The title and four content slides. `_variables.yml` supplies the numbers from the notebook, and `defense-rehearsal.md` is for practice.
 - `decisions.md`. Append one entry per choice. Do not rewrite an old entry.
 - `CHECKLIST.md`. The lab, as checkboxes. Tick them in the final commit.
 - `analysis.ipynb`. The code, and the home of the diagram, the equations, the simulation check, the residuals and calibration, and the limits. A `.py` or `.R` file holds a function two people would otherwise edit in the notebook.

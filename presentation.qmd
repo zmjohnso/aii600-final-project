@@ -1,6 +1,6 @@
 ---
-title: "Weekly covered calls on bitcoin"
-subtitle: "Which strike, and how much of the stack?"
+title: "Weekly Bitcoin covered calls"
+subtitle: "Spot volatility and hypothetical option premiums"
 author: "Zachary Johnson"
 date: "2026-12-02"
 date-format: long
@@ -9,6 +9,7 @@ format:
     embed-resources: true
     self-contained-math: true
     slide-number: true
+    footer: "Coin Metrics Community BTC data · CC BY-NC 4.0"
     center: false
     width: 1280
     height: 720
@@ -43,84 +44,75 @@ format:
 ## Action
 
 ::: {.headline}
-Sell weekly calls on nearly all your coin
+Use forecast payouts to choose the strike
 :::
 
 :::: {.columns}
 ::: {.column width="68%"}
-![](fig/deck_action.png)
+![](fig/deck_action.png){fig-alt="Each evaluation Friday plotted by trailing spot volatility and strike. Crosses indicate holding."}
 :::
 ::: {.column width="32%"}
 ::: {.stat}
-93%
+{{< var spot.trades >}} / {{< var spot.weeks >}}
 :::
 ::: {.statcap}
-of the stack written, on average
-:::
-::: {.sub}
-Strike set by DVOL: close to the money above about 40%.
+Fridays with a call in the main scenario
 :::
 :::
 ::::
 
 ::: {.notes}
-I hold bitcoin and can sell a call against it every Friday. Two choices matter: the strike, and how much of the stack to write. The gray line on the title slide is bitcoin since 2021, and the blue part is the year the model never saw. Bitcoin fell through it.
-
-Each dot is one test Friday. When DVOL, the market's expected volatility, is above about 40 percent, the rule sells close to the money. Below that the premium is thin, and it sells 23 to 29 percent above spot, where there is almost nothing at stake. On average it writes 93 percent of the stack, and the size barely matters, because the strike does the work. Strike and size both come from the model's predictive distribution, so the rule is explicit, not a guess.
+I ask when a bitcoin holder would write a hypothetical weekly covered call, at what strike, and on how much BTC. I estimate a full return distribution from trailing spot volatility, then find the strike with the most expected net BTC and size the position using Kelly. Holding is available every week. The option price is a formula anchored to recent spot volatility with an illustrative cost.
 :::
 
 ## Reason
 
 ::: {.headline}
-+31% more bitcoin than holding
+Does the 7-day signal help?
 :::
 
 ::: {.sub}
-Selling weekly calls, over 52 test weeks.
+Model {{< var spot.model >}} · 30-day baseline {{< var spot.baseline >}} · holding 0%
 :::
 
-![](fig/deck_reason.png){.nostretch width=88%}
-
-::: {.chip}
-Black-Scholes prices, not fills. A falling year.
-:::
+![](fig/deck_reason.png){.nostretch width=88% fig-alt="Cumulative simulated BTC gains against holding for the full model and the 30-day baseline."}
 
 ::: {.notes}
-This is selling weekly calls against just holding the coins, measured in bitcoin. Over the 52 weeks the model never saw, the rule ended 31 percent ahead. That is about 526 thousand satoshis per coin per week, standard error 183 thousand, and it was ahead of holding in 85 percent of weeks. Plain DVOL selling did nearly as well, 29 percent. Two caveats. The prices are Black-Scholes at DVOL, not real fills. And bitcoin fell, so most calls expired worthless. The strike matters: a fixed call 10 percent out of the money earned nothing.
+Both models are fitted on the same 240 weeks. I evaluate on the next 52 weeks and give both the same hypothetical premiums. Adding seven days of realized volatility changed weekly log growth by {{< var spot.gap_log >}}, with a paired interval of {{< var spot.gap_low >}} to {{< var spot.gap_high >}}. The q90 pinball loss was slightly worse after adding seven-day volatility. In a separate comparison, lagged blockchain fees improved q90 pinball loss.
 :::
 
 ## Risk
 
 ::: {.headline}
-Behind holding in 8 of 52 weeks
+A rally can cost more than the premium
 :::
 
-![](fig/deck_risk.png){.nostretch width=88%}
+::: {.sub}
+{{< var spot.losses >}} losses across {{< var spot.trades >}} simulated writes · worst week {{< var spot.worst >}} vs holding
+:::
+
+![](fig/deck_risk.png){.nostretch width=88% fig-alt="Weekly simulated BTC outcomes. Crosses indicate holding."}
 
 ::: {.chip}
-The test year fell, so a rally is untested.
+Illustration · +20% BTC rally with a forced full ATM call · {{< var spot.rally >}} BTC vs holding
 :::
 
 ::: {.notes}
-Each bar is one test week. Red is a week the call left me behind holding: 8 of 52, 15 percent. The worst was minus 4.0 percent of the stack, and the average losing week minus 1.3. The orange and purple lines are the worst weeks of the alternatives. The DVOL-only rule lost 12.5 percent in one week, and a full at-the-money call lost 17 percent. That call actually grew slightly more, but its swings are four times as large. What I have not tested is a strong rally, where selling the call caps my gain.
+My least trusted assumption is the premium. The options market's bids are missing. A 20 percent lower premium gives {{< var spot.low_premium >}} BTC versus holding in the model's repriced scenario, and a 20 percent higher premium gives {{< var spot.high_premium >}}. A separate stress test shows what a 20 percent rally can cost on a forced full ATM call.
 :::
 
 ## Value
 
 ::: {.headline}
-Safety, not growth
+Blockchain fees helped forecast the upper tail
 :::
 
 ::: {.sub}
-A tie on growth. The worst week is a third as deep.
+Secondary model · {{< var spot.fee_sats >}} sats per BTC held per week
 :::
 
-![](fig/deck_value.png){.nostretch width=88%}
-
-::: {.chip}
-"Knows" means perfect foresight, not a real forecast.
-:::
+![](fig/deck_value.png){.nostretch width=88% fig-alt="Paired 95% interval for the change in weekly simulated gain from adding lagged blockchain fees."}
 
 ::: {.notes}
-Two questions. The last slide compared selling with holding, and selling won. This one asks whether my model adds anything to simply selling at DVOL's level. On growth it does not: about 43 thousand satoshis more per coin per week, standard error 294 thousand, a tie. A satoshi is one hundred millionth of a bitcoin. My hypothesis, that realized volatility helps, was not supported. What the model buys is safety: the worst week is minus 4 percent, not minus 12.5. The green bars are not forecasts. Knowing next week's volatility exactly would add about 11 thousand satoshis, which is nothing, while knowing the direction would add about 1.3 million. So the value is in direction, and a volatility model cannot give it.
+Adding lagged fees improved the tail forecast and showed a gain in the simulation. The paired interval, {{< var spot.fee_low >}} to {{< var spot.fee_high >}} sats per BTC per week, still includes zero. Doubling the training sample changed the evaluated policy's growth by {{< var spot.history >}} sats at the displayed precision. Historical bids would test a different uncertainty. For a representative Friday, the forecast payout plus cost required {{< var spot.break_even_sats >}} sats of gross premium per BTC covered at the candidate strike before taking positive exposure.
 :::

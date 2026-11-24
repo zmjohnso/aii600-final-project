@@ -21,3 +21,6 @@ data/*
 *.onnx
 wandb/
 mlruns/
+
+/.quarto/
+**/*.quarto_ipynb
