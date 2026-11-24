@@ -1,118 +1,166 @@
 ---
 title: "Weekly Bitcoin covered calls"
-subtitle: "Spot volatility and hypothetical option premiums"
+subtitle: "Do spot volatility and on-chain fees help decide when to write?"
 author: "Zachary Johnson"
 date: "2026-12-02"
 date-format: long
 format:
   revealjs:
     embed-resources: true
-    self-contained-math: true
     slide-number: true
-    footer: "Coin Metrics Community BTC data · CC BY-NC 4.0"
     center: false
     width: 1280
     height: 720
+    margin: 0.045
     title-slide-attributes:
       data-background-image: fig/deck_title.png
-      data-background-size: 100% auto
-      data-background-position: bottom
-      data-background-color: "#fcfcfb"
+      data-background-size: 87% auto
+      data-background-position: center 95%
+      data-background-color: "#f8fafc"
     include-in-header:
       text: |
         <style>
-        .reveal-viewport, .reveal { background-color: #fcfcfb; color: #0b0b0b; }
-        .reveal-viewport::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 12px; background: #2a78d6; z-index: 50; }
-        .reveal h2 { font-size: 0.62em; text-transform: uppercase; letter-spacing: 0.16em; font-weight: 700; color: #2a78d6; margin: 0.9em 0 0.25em; }
-        .reveal .headline { font-size: 1.5em; font-weight: 800; line-height: 1.1; margin: 0 0 0.3em; }
-        .reveal .sub { font-size: 0.78em; color: #52514e; line-height: 1.25; }
-        .reveal .stat { font-size: 3.4em; font-weight: 800; line-height: 1; color: #2a78d6; margin-top: 0.35em; }
-        .reveal .statcap { font-size: 0.7em; color: #52514e; margin: 0.2em 0 0.9em; }
-        .reveal .chip { display: inline-block; font-size: 0.52em; color: #52514e; border: 1px solid #c3c2b7; border-radius: 1em; padding: 0.2em 0.9em; margin-top: 0.4em; }
-        .reveal img { display: block; margin: 0; max-width: 100%; max-height: none; height: auto; border: 0; box-shadow: none; }
-        .reveal .columns { align-items: center; }
-        .reveal .slides > section#title-slide { top: 0 !important; text-align: left; padding: 0 0 0 0.4em; }
-        .reveal #title-slide h1.title { font-size: 1.9em; font-weight: 800; margin: 0.9em 0 0.1em; }
-        .reveal #title-slide p.subtitle { font-size: 0.95em; color: #52514e; margin: 0 0 0.6em; }
-        .reveal #title-slide p.author, .reveal #title-slide p.date { font-size: 0.6em; color: #52514e; margin: 0.1em 0; }
-        .reveal #title-slide .quarto-title-authors { display: flex; justify-content: flex-start; margin: 0.2em 0 0; }
+        .reveal-viewport, .reveal { background: #f8fafc; color: #142638; }
+        .reveal { font-family: "Avenir Next", system-ui, sans-serif; }
+        .reveal h1, .reveal h2 { font-family: inherit; color: #142638; }
+        .reveal-viewport::before { content: ""; position: fixed; inset: 0 0 auto; height: 9px; background: #155d9e; z-index: 50; }
+        .reveal .slides > section { text-align: left; padding: 16px 38px 0; box-sizing: border-box; }
+        .reveal h2 { color: #155d9e; font-size: 22px; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; margin: 0 0 12px; }
+        .reveal .headline { font-size: 52px; font-weight: 750; line-height: 1.08; letter-spacing: -.025em; margin: 0 0 12px; }
+        .reveal .sub { font-size: 27px; color: #526579; line-height: 1.28; margin: 0 0 22px; }
+        .reveal .deck-grid { display: grid; grid-template-columns: minmax(0, 2.15fr) minmax(0, 1fr); gap: 28px; align-items: center; margin-top: 12px; }
+        .reveal .deck-grid > div { min-width: 0; }
+        .reveal .deck-grid p { margin: 0; }
+        .reveal img { display: block; width: 100%; height: auto; max-height: 375px; object-fit: contain; border: 0; box-shadow: none; margin: 0; }
+        .reveal .card { padding: 22px; background: #edf4fa; border-left: 4px solid #155d9e; border-radius: 8px; }
+        .reveal .card p + p { margin-top: 10px; }
+        .reveal .card .big { color: #155d9e; font-size: 54px; font-weight: 750; line-height: 1.04; }
+        .reveal .card .small { font-size: 23px; color: #334a60; line-height: 1.28; }
+        .reveal .card .caption { font-size: 18px; color: #526579; line-height: 1.3; }
+        .reveal .card.risk { background: #f9ecef; border-color: #b43240; }
+        .reveal .card.risk .big { color: #b43240; }
+        .reveal .source { font-size: 17px; color: #526579; margin: 22px 0 0; }
+        .reveal .source a { color: #155d9e; }
+        .reveal .slides > section#title-slide { top: 0 !important; padding: 25px 58px 0; text-align: left; }
+        .reveal #title-slide h1.title { font-size: 66px; font-weight: 760; letter-spacing: -.03em; line-height: 1.04; margin: 12px 0; }
+        .reveal #title-slide p.subtitle { font-size: 30px; color: #526579; margin: 0 0 15px; }
+        .reveal #title-slide p.author, .reveal #title-slide p.date { font-size: 21px; color: #526579; margin: 4px 0; }
         .reveal #title-slide .quarto-title-author { padding: 0; text-align: left; }
-        .reveal #title-slide .quarto-title-author-name { font-size: 0.62em; color: #52514e; text-align: left; }
+        .reveal #title-slide .quarto-title-authors { justify-content: flex-start; margin: 0; }
+        .reveal #title-slide .quarto-title-author-name { font-size: 21px; color: #526579; }
         </style>
 ---
 
 ## Action
 
 ::: {.headline}
-Use forecast payouts to choose the strike
+Write only when the premium justifies the payout risk
 :::
 
-:::: {.columns}
-::: {.column width="68%"}
-![](fig/deck_action.png){fig-alt="Each evaluation Friday plotted by trailing spot volatility and strike. Crosses indicate holding."}
+::: {.sub}
+Choose the strike by expected BTC gain, then size with Kelly.
 :::
-::: {.column width="32%"}
-::: {.stat}
-{{< var spot.trades >}} / {{< var spot.weeks >}}
+
+:::: {.deck-grid}
+::: {}
+![](fig/deck_action.png){.nostretch fig-alt="Timeline of 52 evaluation weeks, with five call writes in the main simulation."}
 :::
-::: {.statcap}
-Fridays with a call in the main scenario
-:::
+
+::: {.card}
+[{{< var spot.trades >}} of {{< var spot.weeks >}}]{.big}
+
+[weeks with a simulated call]{.small}
+
+[Held BTC in the other {{< var spot.holds >}} weeks.]{.caption}
 :::
 ::::
 
 ::: {.notes}
-I ask when a bitcoin holder would write a hypothetical weekly covered call, at what strike, and on how much BTC. I estimate a full return distribution from trailing spot volatility, then find the strike with the most expected net BTC and size the position using Kelly. Holding is available every week. The option price is a formula anchored to recent spot volatility with an illustrative cost.
+I ask when a bitcoin holder would write a hypothetical weekly covered call, at what strike, and on how much BTC. I forecast a full weekly return distribution, choose the strike with the most expected net BTC, and size the position by expected log wealth. Holding is available every Friday. Premiums come from a pricing formula anchored to trailing 30-day spot volatility, with an illustrative cost.
 :::
 
 ## Reason
 
 ::: {.headline}
-Does the 7-day signal help?
+Adding 7-day volatility made little difference
 :::
 
 ::: {.sub}
-Model {{< var spot.model >}} · 30-day baseline {{< var spot.baseline >}} · holding 0%
+240 weeks for training · 52 weeks for testing · same premiums for both models
 :::
 
-![](fig/deck_reason.png){.nostretch width=88% fig-alt="Cumulative simulated BTC gains against holding for the full model and the 30-day baseline."}
+:::: {.deck-grid}
+::: {}
+![](fig/deck_reason.png){.nostretch fig-alt="The baseline and the model with seven-day volatility both gained about twelve percent in BTC versus holding, which is zero."}
+:::
+
+::: {.card}
+[90th-percentile forecast]{.small}
+
+[Error rose from {{< var spot.q90_base >}} to {{< var spot.q90_model >}}.]{.caption}
+
+[Lower quantile loss is better.]{.caption}
+:::
+::::
 
 ::: {.notes}
-Both models are fitted on the same 240 weeks. I evaluate on the next 52 weeks and give both the same hypothetical premiums. Adding seven days of realized volatility changed weekly log growth by {{< var spot.gap_log >}}, with a paired interval of {{< var spot.gap_low >}} to {{< var spot.gap_high >}}. The q90 pinball loss was slightly worse after adding seven-day volatility. In a separate comparison, lagged blockchain fees improved q90 pinball loss.
+The exact cumulative gains differ slightly, but both round to 12.0% versus holding under the main hypothetical premium scenario. Adding seven-day volatility changed average weekly log growth by {{< var spot.gap_log >}}. The 90th-percentile pinball loss measures both the size and direction of forecast errors, with more weight on underestimating this upper quantile.
 :::
 
 ## Risk
 
 ::: {.headline}
-A rally can cost more than the premium
+The result depends on what buyers pay
 :::
 
 ::: {.sub}
-{{< var spot.losses >}} losses across {{< var spot.trades >}} simulated writes · worst week {{< var spot.worst >}} vs holding
+Simulated BTC gain across three assumed premium levels
 :::
 
-![](fig/deck_risk.png){.nostretch width=88% fig-alt="Weekly simulated BTC outcomes. Crosses indicate holding."}
-
-::: {.chip}
-Illustration · +20% BTC rally with a forced full ATM call · {{< var spot.rally >}} BTC vs holding
+:::: {.deck-grid}
+::: {}
+![](fig/deck_risk.png){.nostretch fig-alt="The model gained 2.0%, 12.0%, and 17.4% versus holding at lower, main, and higher hypothetical premiums."}
 :::
+
+::: {.card .risk}
+[{{< var spot.rally >}}]{.big}
+
+[BTC versus holding in a rally stress test]{.small}
+
+[Assumes BTC jumps 20% and a full at-the-money call was already written.]{.caption}
+:::
+::::
 
 ::: {.notes}
-My least trusted assumption is the premium. The options market's bids are missing. A 20 percent lower premium gives {{< var spot.low_premium >}} BTC versus holding in the model's repriced scenario, and a 20 percent higher premium gives {{< var spot.high_premium >}}. A separate stress test shows what a 20 percent rally can cost on a forced full ATM call.
+My least trusted assumption is the premium. The live option bid is unobserved. With premiums reduced by 20%, the model's repriced outcome falls from {{< var spot.model >}} to {{< var spot.low_premium >}} versus holding. With premiums 20% higher, it rises to {{< var spot.high_premium >}}. The forced full call is a separate stress scenario. None of the five writes in the main scenario lost BTC versus holding.
 :::
 
 ## Value
 
 ::: {.headline}
-Blockchain fees helped forecast the upper tail
+Fees improved the forecast, with uncertain gains
 :::
 
 ::: {.sub}
-Secondary model · {{< var spot.fee_sats >}} sats per BTC held per week
+Adding lagged fees reduced 90th-percentile forecast error from {{< var spot.q90_model >}} to {{< var spot.q90_fees >}}.
 :::
 
-![](fig/deck_value.png){.nostretch width=88% fig-alt="Paired 95% interval for the change in weekly simulated gain from adding lagged blockchain fees."}
+:::: {.deck-grid}
+::: {}
+![](fig/deck_value.png){.nostretch fig-alt="Estimated simulated improvement of 193,095 sats per BTC per week, with a paired 95% interval from −4,894 to +441,937. The interval crosses zero."}
+:::
+
+::: {.card}
+[The interval crosses zero]{.small}
+
+[Paired 95% interval for simulated gains from adding the fee feature.]{.caption}
+:::
+::::
+
+::: {.source}
+Data: [Coin Metrics Community BTC archive](https://github.com/coinmetrics/data/blob/f1a36afb962731c387bb03982758ab0103063da5/csv/btc.csv) · [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) · transformed for this study
+:::
 
 ::: {.notes}
-Adding lagged fees improved the tail forecast and showed a gain in the simulation. The paired interval, {{< var spot.fee_low >}} to {{< var spot.fee_high >}} sats per BTC per week, still includes zero. Doubling the training sample changed the evaluated policy's growth by {{< var spot.history >}} sats at the displayed precision. Historical bids would test a different uncertainty. For a representative Friday, the forecast payout plus cost required {{< var spot.break_even_sats >}} sats of gross premium per BTC covered at the candidate strike before taking positive exposure.
+Adding lagged blockchain fees was a secondary test. The 90th-percentile forecast improved on this holdout. The separate portfolio estimate was {{< var spot.fee_sats >}} sats per BTC held per week, with a paired 95% interval of {{< var spot.fee_low >}} to {{< var spot.fee_high >}}. The point estimate is not required to be the midpoint of a bootstrap percentile interval. True historical bids could test the pricing assumption.
 :::
