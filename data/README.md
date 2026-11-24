@@ -1,12 +1,16 @@
 # Data provenance
 
-Run from the repository root with the pinned Python environment.
+Download `coinmetrics_btc.csv` from the [GitHub data release](https://github.com/zmjohnso/aii600-final-project/releases/tag/data) and place it in this directory. To download directly from the upstream snapshot instead, run from the repository root with the pinned Python environment.
 
 ```bash
 python scripts/fetch_covered_call.py
 ```
 
 The script downloads and verifies the pinned [Coin Metrics Community BTC archive](https://github.com/coinmetrics/data/blob/f1a36afb962731c387bb03982758ab0103063da5/csv/btc.csv) at commit `f1a36afb962731c387bb03982758ab0103063da5`. The notebook checks the same SHA-256 before analysis. The raw CSV is kept outside git.
+
+**SHA-256 for `coinmetrics_btc.csv`**
+
+`06495ff8e643432e6948b7b4686ce44fc106217287dabdc1b38351d9ddec46c3`
 
 **Attribution.** Coin Metrics, Inc., *Free Coin Metrics data archives*, BTC daily CSV, [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). Charts and numerical results in this version are noncommercial coursework derived from that archive. This project aggregates and transforms the daily source observations.
 
